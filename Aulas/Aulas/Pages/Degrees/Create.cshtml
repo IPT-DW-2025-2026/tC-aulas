@@ -1,0 +1,55 @@
+﻿@page
+@model Aulas.Pages.Degrees.CreateModel
+
+        @{
+        ViewData["Title"] = "Create";
+        }
+        
+        <h1>Create</h1>
+        
+    <h4>Degree</h4>
+    <hr />
+    <div class="row">
+    <div class="col-md-4">
+
+    <form method="post" enctype="multipart/form-data">
+       @* the use of  enctype="multipart/form-data" 
+          means that you want to upload a file
+       *@
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @* when you have some errors, you will see it in red text *@
+
+
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label asp-for="Degree.Name" class="control-label"></label>
+                <input asp-for="Degree.Name" class="form-control" aria-required="true"/>
+                <span asp-validation-for="Degree.Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Degree.Logotype" class="control-label"></label>
+               @*  <input asp-for="Degree.Logotype" class="form-control" /> *@
+                <input asp-for="ImageLogo"  
+                       type="file"
+                       accept=".jpg,.jpeg,.png"
+                       class="form-control" />
+                <span asp-validation-for="ImageLogo" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <br />
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
