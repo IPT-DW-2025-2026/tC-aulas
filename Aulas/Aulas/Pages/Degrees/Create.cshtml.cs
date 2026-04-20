@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Aulas.Data;
 using Aulas.Data.Model;
 using System.Globalization;
+using System.ComponentModel.DataAnnotations;
 
 namespace Aulas.Pages.Degrees {
 
@@ -59,7 +60,8 @@ namespace Aulas.Pages.Degrees {
       public Degree Degree { get; set; } = default!;
 
       [BindProperty]
-      public IFormFile ImageLogo { get; set; }
+      [Required(ErrorMessage = "Por favor, selecione uma imagem (PNG ou JPG).")]
+      public IFormFile? ImageLogo { get; set; }
 
 
 
