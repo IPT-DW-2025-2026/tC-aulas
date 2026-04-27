@@ -30,7 +30,10 @@
             </div>
             <div class="form-group">
                 <label asp-for="Student.DegreeFK" class="control-label"></label>
-                <select asp-for="Student.DegreeFK" class ="form-control" asp-items="ViewBag.DegreeFK" ></select>
+               @* dropdown list for Degree *@
+                <select asp-for="Student.DegreeFK" class ="form-control" asp-items="ViewBag.DegreeFK" >
+                    <option value="">-- Select Degree --</option>
+                </select>
             </div>
             <div class="form-group">
                 <span class="text-danger">*</span>
