@@ -32,6 +32,8 @@ namespace Aulas.Data.Model {
       /// </summary>
       [Display(Name = "Telemóvel")]
       [StringLength(19)]
+      [RegularExpression(@"((\+)|(00)[0-9]{2,5})?[0-9]{6,12}", 
+                         ErrorMessage = "O {0} deve conter apenas números e um sinal de mais opcional no início.")]
       public string? CellPhone { get; set; }
 
       /// <summary>
