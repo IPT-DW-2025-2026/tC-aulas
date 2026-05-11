@@ -19,6 +19,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -90,7 +91,7 @@ namespace Aulas.Areas.Identity.Pages.Account {
          ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
          ///     directly from your code. This API may change or be removed in future releases.
          /// </summary>
-         [Required]
+         [Required(ErrorMessage = "o {0} é obrigatório")]
          [StringLength(100, ErrorMessage = "A {0} deve ter  entre {1} e {2} caracteres.", MinimumLength = 6)]
          [DataType(DataType.Password)]
          [Display(Name = "Password")]
@@ -138,17 +139,60 @@ namespace Aulas.Areas.Identity.Pages.Account {
 
             await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
             await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+            // save the users' data on the database
             var result = await _userManager.CreateAsync(user, Input.Password);
 
             if(result.Succeeded) {
+               _logger.LogInformation("User created a new account with password.");
+
                // you have success in creating the user,
                // but you also want to save the data related with the Student
 
+               // Convert the TuitionFeeAux string to a decimal
+               // and assign it to the TuitionFee property
+               Input.Student.TuitionFee = Convert.ToDecimal(Input.Student.TuitionFeeAux.Replace('.', ','),
+                                                      new CultureInfo("pt-PT"));
 
+               // we need to decide how to assign the StudentNumber to this new user
 
-               _logger.LogInformation("User created a new account with password.");
-
+               // add the user's ID to the new 'student'
                var userId = await _userManager.GetUserIdAsync(user);
+               Input.Student.UserID = userId;
+
+              // save the student data on the database
+               try {
+                  _context.Students.Add(Input.Student);
+                  await _context.SaveChangesAsync();
+               }
+               catch(Exception) {
+                  // do not forget that YOU MUST handle the exception
+                  // in a way that is appropriate for your application
+                  // DO NOT USE a 'throw' in a production application,
+                  // because it will present to many details about the exception to the user,
+                  // which IS a security risk.
+
+                  // if you arrive here, it means that the user was created successfully,
+                  // but there was an error when you tried to save the student data on the database.
+                  // What we need to do?
+
+                  /*
+                   * 1. You must delete the user that was created, 
+                   *    because it is not useful without the student data.
+                   * 2. You must show an error message to the user, 
+                   *    saying that there was an error when saving the student data, 
+                   *    and that they should try to register again.
+                   * 3. You must log the error, so you can analyze it later and fix it.
+                   */
+
+                  // throw;
+               }
+
+
+
+
+
+
+               // send notification message to user
                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                var callbackUrl = Url.Page(
@@ -172,6 +216,10 @@ namespace Aulas.Areas.Identity.Pages.Account {
                ModelState.AddModelError(string.Empty, error.Description);
             }
          }
+
+         // select the list of degrees to appear
+         // in the dropdown list for the Degree property
+         ViewData["DegreeFK"] = new SelectList(_context.Degrees.OrderBy(d => d.Name), "Id", "Name");
 
          // If we got this far, something failed, redisplay form
          return Page();

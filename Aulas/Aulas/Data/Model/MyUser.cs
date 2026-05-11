@@ -40,7 +40,8 @@ namespace Aulas.Data.Model {
       /// atributo para funcionar como FK entre a tabela dos MyUser
       /// e a tabela da Autenticação
       /// </summary>
-      //        public string UserID { get; set; } = null!;
+      [StringLength(50)]
+      public string UserID { get; set; } = "";
 
    }
 }
