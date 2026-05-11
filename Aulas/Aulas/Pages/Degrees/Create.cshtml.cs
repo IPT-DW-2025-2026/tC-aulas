@@ -11,9 +11,14 @@ using Aulas.Data;
 using Aulas.Data.Model;
 using System.Globalization;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Aulas.Pages.Degrees {
 
+   [Authorize] // this annotation indicates that the page requires user authentication,
+               // to access the page, the user must be logged in.
+               // If the user is not authenticated,
+               // he will be redirected to the login page.
    public class CreateModel:PageModel {
 
       /// <summary>
