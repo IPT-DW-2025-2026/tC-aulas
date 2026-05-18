@@ -7,19 +7,27 @@ using Aulas.Data;
 
 namespace Aulas.Pages.Courses;
 
-public class IndexModel : PageModel
-{
-    private readonly ApplicationDbContext _context;
+public class IndexModel:PageModel {
+   private readonly ApplicationDbContext _context;
 
-    public IndexModel(ApplicationDbContext context)
-    {
-        _context = context;
-    }
+   public IndexModel(ApplicationDbContext context) {
+      _context = context;
+   }
 
-    public IList<Course> Course { get; set; } = default!;
+   public IList<Course> Courses { get; set; } = default!;
 
-    public async Task OnGetAsync()
-    {
-        Course = await _context.Courses.ToListAsync();
-    }
+   public async Task OnGetAsync() {
+      /*
+       * SELECT * 
+       * FROM Courses c INNER JOIN Professors p ON c.ProfessorFK = p.Id
+       *                INNER JOIN Degrees d ON c.DegreeFK = d.Id
+       * ORDER BY c.Name
+       */
+      Courses = await _context.Courses
+                              .Include(c=>c.ProfessorsList)
+                              .Include(c=>c.Degree)
+                              .OrderBy(c => c.Name)
+                              .ToListAsync();
+      // LINQ: Language Integrated Query
+   }
 }
