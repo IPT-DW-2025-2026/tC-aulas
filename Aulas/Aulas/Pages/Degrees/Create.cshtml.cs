@@ -15,10 +15,28 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Aulas.Pages.Degrees {
 
+   /*
    [Authorize] // this annotation indicates that the page requires user authentication,
                // to access the page, the user must be logged in.
                // If the user is not authenticated,
                // he will be redirected to the login page.
+   */
+   [Authorize(Roles = "Professor")] // this annotation indicates that the page requires user authentication and authorization,
+                                    // to access the page, the user must be logged in and have the "Professor" role.
+                                    // If the user is not authenticated, he will be redirected to the login page.
+                                    // If the user is authenticated but does not have the "Professor" role, he will receive an "Access Denied" message.
+
+   /* if you want to allow access to the page for users with multiple roles,
+    * you can specify the roles in a comma-separated list, like this:
+    * [Authorize(Roles = "Professor,Administrativo")]
+    * In this case, users with either the "Professor" role or the "Administrativo" role will be able to access the page.
+    * 
+    * But, if you write:
+    * [Authorize(Roles = "Professor")]
+    * [Authorize(Roles = "Administrativo")]
+    * only users with both the "Professor" role and 
+    * the "Administrativo" role will be able to access the page.
+    */
    public class CreateModel:PageModel {
 
       /// <summary>

@@ -7,7 +7,8 @@
 
 <h1>Cursos</h1>
 
-@if(User.Identity.IsAuthenticated){
+@if(User.Identity.IsAuthenticated && 
+    User.IsInRole("Professor")){
     <p>
         <a asp-page="Create">novo curso</a>
     </p>
@@ -40,7 +41,8 @@
                         title="@item.Name"
                         style="max-width: 100px; " />
             </td>
-            @if(User.Identity.IsAuthenticated) {
+            @if(User.Identity.IsAuthenticated && 
+                User.IsInRole("Professor")) {
                <td>
                     <a asp-page="./Edit" asp-route-id="@item.Id">Editar</a> |
                     <a asp-page="./Details" asp-route-id="@item.Id">Detalhes</a> |
