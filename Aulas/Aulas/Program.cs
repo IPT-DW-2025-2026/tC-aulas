@@ -1,4 +1,5 @@
 using Aulas.Data;
+using Aulas.Data.Seed;
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +32,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if(app.Environment.IsDevelopment()) {
    app.UseMigrationsEndPoint();
+   // Invocar o seed da BD
+   app.UseItToSeedSqlServer();
 }
 else {
    app.UseExceptionHandler("/Error");
