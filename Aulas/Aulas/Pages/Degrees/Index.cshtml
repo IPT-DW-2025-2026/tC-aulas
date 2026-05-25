@@ -7,9 +7,13 @@
 
 <h1>Cursos</h1>
 
-<p>
-    <a asp-page="Create">novo curso</a>
-</p>
+@if(User.Identity.IsAuthenticated && 
+    User.IsInRole("Professor")){
+    <p>
+        <a asp-page="Create">novo curso</a>
+    </p>
+}
+
 <table class="table">
     <thead>
         <tr>
@@ -19,7 +23,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Degree[0].Logotype)
             </th>
-            <th></th>
+            @if(User.Identity.IsAuthenticated) {
+                <th></th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -35,11 +41,14 @@
                         title="@item.Name"
                         style="max-width: 100px; " />
             </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Editar</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Detalhes</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Excluir</a>
-            </td>
+            @if(User.Identity.IsAuthenticated && 
+                User.IsInRole("Professor")) {
+               <td>
+                    <a asp-page="./Edit" asp-route-id="@item.Id">Editar</a> |
+                    <a asp-page="./Details" asp-route-id="@item.Id">Detalhes</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.Id">Excluir</a>
+               </td>
+            }
         </tr>
 }
     </tbody>

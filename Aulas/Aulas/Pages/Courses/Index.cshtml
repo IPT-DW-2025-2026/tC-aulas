@@ -1,0 +1,87 @@
+@page
+@model Aulas.Pages.Courses.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+@if(User.IsInRole("Professor")) { 
+    <p>
+        <a asp-page="Create">Create New</a>
+    </p>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Courses[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Courses[0].CurricularYear)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Courses[0].Semester)
+            </th>
+          @*   <th>
+                @Html.DisplayNameFor(model => model.Courses[0].DegreeFK)
+            </th> *@
+            <th>
+                @Html.DisplayNameFor(model => model.Courses[0].Degree)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Courses[0].ProfessorsList)
+            </th>
+        @*     <th>
+                @Html.DisplayNameFor(model => model.Courses[0].RegistrationsList)
+            </th> *@
+             @if(User.IsInRole("Professor")) {
+                <th></th>
+             }
+      </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Courses) {
+        <tr>
+            <td>
+                @Html.DisplayFor(model => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.CurricularYear)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Semester)
+            </td>
+         @*    <td>
+                @Html.DisplayFor(model => item.DegreeFK)
+            </td> *@
+            <td>
+                @Html.DisplayFor(model => item.Degree.Name)
+            </td>
+            <td>
+              @*   @Html.DisplayFor(model => item.ProfessorsList) *@
+               @foreach(var prof in item.ProfessorsList.OrderBy(p => p.Name))
+               {
+                  @prof.Name <br />
+               }
+
+          </td>
+        @*     <td>
+                @Html.DisplayFor(model => item.RegistrationsList)
+            </td> *@
+            @if(User.IsInRole("Professor")) {
+               <td>
+                   @if(Model.MyCoursesIds.Contains(item.Id)){
+                       <text>
+                            <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                            <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                       </text>
+                    }
+                </td>
+            }
+        </tr>
+}
+    </tbody>
+</table>
