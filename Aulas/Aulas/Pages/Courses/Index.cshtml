@@ -7,9 +7,11 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
+@if(User.IsInRole("Professor")) { 
+    <p>
+        <a asp-page="Create">Create New</a>
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -34,8 +36,10 @@
         @*     <th>
                 @Html.DisplayNameFor(model => model.Courses[0].RegistrationsList)
             </th> *@
-            <th></th>
-        </tr>
+             @if(User.IsInRole("Professor")) {
+                <th></th>
+             }
+      </tr>
     </thead>
     <tbody>
 @foreach (var item in Model.Courses) {
@@ -66,11 +70,17 @@
         @*     <td>
                 @Html.DisplayFor(model => item.RegistrationsList)
             </td> *@
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
+            @if(User.IsInRole("Professor")) {
+               <td>
+                   @if(Model.MyCoursesIds.Contains(item.Id)){
+                       <text>
+                            <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                            <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                       </text>
+                    }
+                </td>
+            }
         </tr>
 }
     </tbody>

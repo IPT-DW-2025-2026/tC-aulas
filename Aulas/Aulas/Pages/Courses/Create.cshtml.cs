@@ -4,9 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 using Aulas.Data.Model;
 using Aulas.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Aulas.Pages.Courses;
 
+[Authorize(Roles = "Professor")]
 public class CreateModel : PageModel
 {
     private readonly ApplicationDbContext _context;
